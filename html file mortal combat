@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Kombat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Mini Kombat</h1>
+  <div id="game">
+    <div id="fighter1" class="fighter">🧍</div>
+    <div id="fighter2" class="fighter">🧍</div>
+  </div>
+  <p>Player 1: A/D to move, W to punch</p>
+  <p>Player 2: ←/→ to move, ↑ to punch</p>
+  <script src="game.js"></script>
+</body>
+</html>
