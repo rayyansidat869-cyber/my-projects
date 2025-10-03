@@ -76,7 +76,7 @@ function getBestMove() {
 }
 
 function minimax(boardState, depth, isMaximizing) {
-  if (depth > 4) return 0; // Limit depth to prevent lag
+  if (depth > 4) return 0; // Prevent lag
   const winner = evaluate(boardState);
   if (winner !== null) return winner;
 
