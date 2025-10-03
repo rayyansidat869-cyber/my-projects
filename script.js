@@ -8,7 +8,6 @@ const winPatterns = [
   [0,4,8], [2,4,6]
 ];
 
-// ✅ Render the board
 function renderBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
@@ -16,14 +15,12 @@ function renderBoard() {
     const cellDiv = document.createElement('div');
     cellDiv.className = 'cell';
     cellDiv.textContent = cell;
-   cellDiv.addEventListener('click', () => handleClick(index));
-cellDiv.addEventListener('touchstart', () => handleClick(index));
-
-  board.appendChild(cellDiv);
+    cellDiv.addEventListener('click', () => handleClick(index));
+    cellDiv.addEventListener('touchstart', () => handleClick(index));
+    board.appendChild(cellDiv);
   });
 }
 
-// ✅ Handle player move
 function handleClick(index) {
   if (!gameActive || cells[index]) return;
   cells[index] = currentPlayer;
@@ -32,14 +29,12 @@ function handleClick(index) {
 
   currentPlayer = 'O';
   document.getElementById('status').textContent = "Computer's turn";
-  setTimeout(computerMove, 500);
+  setTimeout(computerMove, 300);
 }
 
-// ✅ AI move
 function computerMove() {
   if (!gameActive) return;
-  const modeSelect = document.getElementById('mode');
-  const mode = modeSelect ? modeSelect.value : 'easy';
+  const mode = document.getElementById('mode').value;
   let move;
 
   if (mode === 'easy') {
@@ -59,7 +54,6 @@ function computerMove() {
   document.getElementById('status').textContent = "Your turn";
 }
 
-// ✅ Minimax for hard mode
 function getBestMove() {
   let bestScore = -Infinity;
   let move;
@@ -78,9 +72,8 @@ function getBestMove() {
 }
 
 function minimax(boardState, depth, isMaximizing) {
-  if (depth > 4) return 0; // Prevent lag
-  const winner = evaluate(boardState);
-  if (winner !== null) return winner;
+  const result = evaluate(boardState);
+  if (result !== null) return result - depth * Math.sign(result);
 
   if (isMaximizing) {
     let best = -Infinity;
@@ -109,14 +102,13 @@ function evaluate(boardState) {
   for (let pattern of winPatterns) {
     const [a, b, c] = pattern;
     if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
-      return boardState[a] === 'O' ? 1 : -1;
+      return boardState[a] === 'O' ? 10 : -10;
     }
   }
   if (!boardState.includes('')) return 0;
   return null;
 }
 
-// ✅ Check for winner or draw
 function checkWinner() {
   for (let pattern of winPatterns) {
     const [a, b, c] = pattern;
@@ -134,7 +126,6 @@ function checkWinner() {
   return false;
 }
 
-// ✅ Restart game
 function resetGame() {
   cells = Array(9).fill('');
   currentPlayer = 'X';
@@ -143,5 +134,4 @@ function resetGame() {
   renderBoard();
 }
 
-// ✅ Initialize board on load
 renderBoard();
