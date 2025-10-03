@@ -36,12 +36,88 @@ function handleClick(index) {
   cells[index] = currentPlayer;
   renderBoard();
   if (checkWinner()) return;
+
   currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+  updateStatus();
+
+  if (currentPlayer === 'O') {
+    setTimeout(computerMove, 500);
+  }
+}
+
+function computerMove() {
+  if (!gameActive) return;
+  const mode = document.getElementById('mode').value;
+  let move;
+
+  if (mode === 'easy') {
+    const empty = cells.map((v, i) => v === '' ? i : null).filter(v => v !== null);
+    move = empty[Math.floor(Math.random() * empty.length)];
+  } else {
+    move = getBestMove();
+  }
+
+  cells[move] = 'O';
+  renderBoard();
+  if (checkWinner()) return;
+
+  currentPlayer = 'X';
   updateStatus();
 }
 
-function updateStatus() {
-  document.getElementById('status').textContent = `${playerName} (${currentPlayer})'s turn`;
+function getBestMove() {
+  let bestScore = -Infinity;
+  let move;
+  for (let i = 0; i < 9; i++) {
+    if (cells[i] === '') {
+      cells[i] = 'O';
+      let score = minimax(cells, 0, false);
+      cells[i] = '';
+      if (score > bestScore) {
+        bestScore = score;
+        move = i;
+      }
+    }
+  }
+  return move;
+}
+
+function minimax(boardState, depth, isMaximizing) {
+  const winner = evaluate(boardState);
+  if (winner !== null) return winner;
+
+  if (isMaximizing) {
+    let best = -Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (boardState[i] === '') {
+        boardState[i] = 'O';
+        best = Math.max(best, minimax(boardState, depth + 1, false));
+        boardState[i] = '';
+      }
+    }
+    return best;
+  } else {
+    let best = Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (boardState[i] === '') {
+        boardState[i] = 'X';
+        best = Math.min(best, minimax(boardState, depth + 1, true));
+        boardState[i] = '';
+      }
+    }
+    return best;
+  }
+}
+
+function evaluate(boardState) {
+  for (let pattern of winPatterns) {
+    const [a, b, c] = pattern;
+    if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+      return boardState[a] === 'O' ? 1 : -1;
+    }
+  }
+  if (!boardState.includes('')) return 0;
+  return null;
 }
 
 function checkWinner() {
@@ -52,6 +128,7 @@ function checkWinner() {
       document.getElementById('status').textContent = `${cells[a]} wins!`;
       drawWinLine(a, c);
       updateScore(cells[a]);
+      launchConfetti();
       return true;
     }
   }
@@ -81,30 +158,19 @@ function resetGame() {
   renderBoard();
 }
 
+function updateStatus() {
+  document.getElementById('status').textContent = `${playerName} (${currentPlayer})'s turn`;
+}
+
 function drawWinLine(start, end) {
   const canvas = document.getElementById('winLine');
   const board = document.getElementById('board');
   canvas.width = board.offsetWidth;
   canvas.height = board.offsetHeight;
   const ctx = canvas.getContext('2d');
-  const cellSize = 100;
-  const offset = 10;
 
+  const cellSize = 100;
   const x1 = (start % 3) * cellSize + cellSize / 2;
   const y1 = Math.floor(start / 3) * cellSize + cellSize / 2;
   const x2 = (end % 3) * cellSize + cellSize / 2;
-  const y2 = Math.floor(end / 3) * cellSize + cellSize / 2;
-
-  ctx.strokeStyle = 'red';
-  ctx.lineWidth = 5;
-  ctx.beginPath();
-  ctx.moveTo(x1 + offset, y1 + offset);
-  ctx.lineTo(x2 + offset, y2 + offset);
-  ctx.stroke();
-}
-
-function clearCanvas() {
-  const canvas = document.getElementById('winLine');
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+  const y
