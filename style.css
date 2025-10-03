@@ -1,31 +1,17 @@
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background: #f0f0f0;
+  background: #f9f9f9;
   margin: 0;
   padding: 20px;
-}
-
-#splash {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: #222;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
 }
 
 .board {
   display: grid;
   grid-template-columns: repeat(3, 100px);
-  grid-gap: 10px;
+  gap: 10px;
   justify-content: center;
   margin: 20px auto;
-  position: relative;
 }
 
 .cell {
@@ -44,16 +30,3 @@ body {
 .cell:hover {
   transform: scale(1.1);
 }
-
-#scoreboard {
-  margin: 10px;
-  font-weight: bold;
-}
-
-canvas#winLine {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-}
-
