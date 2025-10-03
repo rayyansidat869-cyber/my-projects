@@ -133,6 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBoard();
   }
 
+  window.resetGame = resetGame;
+
+
   modeSelect.addEventListener('change', () => {
     resetGame();
   });
