@@ -9,4 +9,4 @@ A browser-based Tic Tac Toe game with Easy and Hard AI modes. Built using HTML, 
 - Stylish animations
 
 ## Live Demo
-[Play it here](https://rayyansidat869.github.io/myprojects/)
+[Play it here](https://rayyansidat869-cyber.github.io/tic-tac-toe/)
