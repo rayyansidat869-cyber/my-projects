@@ -10,6 +10,7 @@ const winPatterns = [
   [0,4,8], [2,4,6]
 ];
 
+// ✅ Start Game button logic
 function startGame() {
   const nameInput = document.getElementById('playerName').value;
   playerName = nameInput || "Player";
@@ -18,6 +19,7 @@ function startGame() {
   resetGame();
 }
 
+// ✅ Render board
 function renderBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
@@ -31,6 +33,7 @@ function renderBoard() {
   clearCanvas();
 }
 
+// ✅ Handle player move
 function handleClick(index) {
   if (!gameActive || cells[index]) return;
   cells[index] = currentPlayer;
@@ -45,6 +48,7 @@ function handleClick(index) {
   }
 }
 
+// ✅ AI move
 function computerMove() {
   if (!gameActive) return;
   const mode = document.getElementById('mode').value;
@@ -65,6 +69,7 @@ function computerMove() {
   updateStatus();
 }
 
+// ✅ Minimax for hard mode
 function getBestMove() {
   let bestScore = -Infinity;
   let move;
@@ -85,119 +90,4 @@ function getBestMove() {
 function minimax(boardState, depth, isMaximizing) {
   const winner = evaluate(boardState);
   if (winner !== null) return winner;
-
-  if (isMaximizing) {
-    let best = -Infinity;
-    for (let i = 0; i < 9; i++) {
-      if (boardState[i] === '') {
-        boardState[i] = 'O';
-        best = Math.max(best, minimax(boardState, depth + 1, false));
-        boardState[i] = '';
-      }
-    }
-    return best;
-  } else {
-    let best = Infinity;
-    for (let i = 0; i < 9; i++) {
-      if (boardState[i] === '') {
-        boardState[i] = 'X';
-        best = Math.min(best, minimax(boardState, depth + 1, true));
-        boardState[i] = '';
-      }
-    }
-    return best;
-  }
-}
-
-function evaluate(boardState) {
-  for (let pattern of winPatterns) {
-    const [a, b, c] = pattern;
-    if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
-      return boardState[a] === 'O' ? 1 : -1;
-    }
-  }
-  if (!boardState.includes('')) return 0;
-  return null;
-}
-
-function checkWinner() {
-  for (let pattern of winPatterns) {
-    const [a, b, c] = pattern;
-    if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
-      gameActive = false;
-      document.getElementById('status').textContent = `${cells[a]} wins!`;
-      drawWinLine(a, c);
-      updateScore(cells[a]);
-      launchConfetti();
-      return true;
-    }
-  }
-  if (!cells.includes('')) {
-    gameActive = false;
-    document.getElementById('status').textContent = "It's a draw!";
-    return true;
-  }
-  return false;
-}
-
-function updateScore(winner) {
-  if (winner === 'X') {
-    xWins++;
-    document.getElementById('xWins').textContent = `X Wins: ${xWins}`;
-  } else {
-    oWins++;
-    document.getElementById('oWins').textContent = `O Wins: ${oWins}`;
-  }
-}
-
-function resetGame() {
-  cells = Array(9).fill('');
-  currentPlayer = 'X';
-  gameActive = true;
-  updateStatus();
-  renderBoard();
-}
-
-function updateStatus() {
-  document.getElementById('status').textContent = `${playerName} (${currentPlayer})'s turn`;
-}
-
-function drawWinLine(start, end) {
-  const canvas = document.getElementById('winLine');
-  const board = document.getElementById('board');
-  canvas.width = board.offsetWidth;
-  canvas.height = board.offsetHeight;
-  const ctx = canvas.getContext('2d');
-
-  const cellSize = 100;
-  const x1 = (start % 3) * cellSize + cellSize / 2;
-  const y1 = Math.floor(start / 3) * cellSize + cellSize / 2;
-  const x2 = (end % 3) * cellSize + cellSize / 2;
-  const y2 = Math.floor(end / 3) * cellSize + cellSize / 2;
-
-  let progress = 0;
-  const steps = 30;
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 6;
-    ctx.lineCap = 'round';
-
-    const currentX = x1 + (x2 - x1) * (progress / steps);
-    const currentY = y1 + (y2 - y1) * (progress / steps);
-
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(currentX, currentY);
-    ctx.stroke();
-
-    progress++;
-    if (progress <= steps) {
-      requestAnimationFrame(animate);
-    }
-  }
-
-  animate();
-}
 
