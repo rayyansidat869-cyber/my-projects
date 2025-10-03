@@ -25,6 +25,7 @@ body {
   grid-gap: 10px;
   justify-content: center;
   margin: 20px auto;
+  position: relative;
 }
 
 .cell {
@@ -37,7 +38,11 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.cell:hover {
+  transform: scale(1.1);
 }
 
 #scoreboard {
@@ -51,3 +56,4 @@ canvas#winLine {
   left: 0;
   pointer-events: none;
 }
+
