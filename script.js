@@ -111,4 +111,5 @@ function evaluate(boardState) {
   if (!boardState.includes('')) return 0;
   return null;
 }
+renderBoard();
 
