@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tic Tac Toe</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
   <div id="splash">
@@ -15,6 +16,13 @@
 
   <div id="game" style="display:none;">
     <h1>Tic Tac Toe</h1>
+    <div>
+      <label for="mode">Choose difficulty:</label>
+      <select id="mode">
+        <option value="easy">Easy</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
     <p id="status">Waiting...</p>
     <div id="scoreboard">
       <span id="xWins">X Wins: 0</span>
