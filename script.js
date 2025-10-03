@@ -40,6 +40,8 @@ function computerMove() {
   if (mode === 'easy') {
     const empty = cells.map((v, i) => v === '' ? i : null).filter(v => v !== null);
     move = empty[Math.floor(Math.random() * empty.length)];
+  } else if (mode === 'hard') {
+    move = getBestMoveLimited();
   } else {
     move = getBestMove();
   }
@@ -52,6 +54,23 @@ function computerMove() {
 
   currentPlayer = 'X';
   document.getElementById('status').textContent = "Your turn";
+}
+
+function getBestMoveLimited() {
+  let bestScore = -Infinity;
+  let move;
+  for (let i = 0; i < 9; i++) {
+    if (cells[i] === '') {
+      cells[i] = 'O';
+      let score = minimax(cells, 0, false, 3);
+      cells[i] = '';
+      if (score > bestScore) {
+        bestScore = score;
+        move = i;
+      }
+    }
+  }
+  return move;
 }
 
 function getBestMove() {
@@ -71,16 +90,17 @@ function getBestMove() {
   return move;
 }
 
-function minimax(boardState, depth, isMaximizing) {
+function minimax(boardState, depth, isMaximizing, maxDepth = Infinity) {
   const result = evaluate(boardState);
   if (result !== null) return result - depth * Math.sign(result);
+  if (depth >= maxDepth) return 0;
 
   if (isMaximizing) {
     let best = -Infinity;
     for (let i = 0; i < 9; i++) {
       if (boardState[i] === '') {
         boardState[i] = 'O';
-        best = Math.max(best, minimax(boardState, depth + 1, false));
+        best = Math.max(best, minimax(boardState, depth + 1, false, maxDepth));
         boardState[i] = '';
       }
     }
@@ -90,7 +110,7 @@ function minimax(boardState, depth, isMaximizing) {
     for (let i = 0; i < 9; i++) {
       if (boardState[i] === '') {
         boardState[i] = 'X';
-        best = Math.min(best, minimax(boardState, depth + 1, true));
+        best = Math.min(best, minimax(boardState, depth + 1, true, maxDepth));
         boardState[i] = '';
       }
     }
