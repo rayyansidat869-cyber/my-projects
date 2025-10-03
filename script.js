@@ -101,10 +101,14 @@ function minimax(boardState, depth, isMaximizing) {
     return best;
   }
 }
-
 function evaluate(boardState) {
   for (let pattern of winPatterns) {
     const [a, b, c] = pattern;
     if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
       return boardState[a] === 'O' ? 1 : -1;
     }
+  }
+  if (!boardState.includes('')) return 0;
+  return null;
+}
+
