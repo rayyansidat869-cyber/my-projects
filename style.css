@@ -1,113 +1,53 @@
-/* Reset and base styles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #fdfbfb, #ebedee);
-  color: #333;
+  font-family: Arial, sans-serif;
   text-align: center;
-  padding: 40px 20px;
+  background: #f0f0f0;
+  margin: 0;
+  padding: 20px;
 }
 
-/* Title */
-h1 {
-  font-size: 3em;
-  margin-bottom: 20px;
-  color: #4b6cb7;
-  text-shadow: 1px 1px 2px #aaa;
+#splash {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #222;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
 }
 
-/* Mode selector */
-label {
-  font-size: 1.1em;
-  margin-right: 10px;
-}
-
-select {
-  padding: 8px 12px;
-  font-size: 1em;
-  border-radius: 6px;
-  border: 1px solid #aaa;
-  background-color: #fff;
-  margin-bottom: 20px;
-}
-
-/* Game board */
 .board {
   display: grid;
   grid-template-columns: repeat(3, 100px);
-  grid-gap: 12px;
+  grid-gap: 10px;
   justify-content: center;
-  margin: 30px auto;
+  margin: 20px auto;
 }
 
 .cell {
   width: 100px;
   height: 100px;
-  background: #fff;
-  border: 3px solid #4b6cb7;
-  font-size: 2.5em;
-  font-weight: bold;
-  color: #4b6cb7;
+  font-size: 2rem;
+  background: white;
+  border: 2px solid #333;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.3s ease;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: relative;
 }
 
-.cell:hover {
-  background-color: #e0e7ff;
-  transform: scale(1.05);
+#scoreboard {
+  margin: 10px;
+  font-weight: bold;
 }
 
-/* Status text */
-#status {
-  font-size: 1.3em;
-  margin-top: 20px;
-  color: #333;
-  font-weight: 500;
-}
-
-/* Button */
-button {
-  margin-top: 25px;
-  padding: 12px 24px;
-  font-size: 1em;
-  background-color: #4b6cb7;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-  background-color: #3a539b;
-  transform: scale(1.05);
-}
-
-/* Responsive tweaks */
-@media (max-width: 500px) {
-  .board {
-    grid-template-columns: repeat(3, 80px);
-    grid-gap: 10px;
-  }
-
-  .cell {
-    width: 80px;
-    height: 80px;
-    font-size: 2em;
-  }
-
-  h1 {
-    font-size: 2em;
-  }
+canvas#winLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
 }
