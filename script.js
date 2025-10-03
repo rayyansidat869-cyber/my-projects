@@ -76,6 +76,7 @@ function getBestMove() {
 }
 
 function minimax(boardState, depth, isMaximizing) {
+  if (depth > 4) return 0; // Limit depth to prevent lag
   const winner = evaluate(boardState);
   if (winner !== null) return winner;
 
@@ -101,6 +102,7 @@ function minimax(boardState, depth, isMaximizing) {
     return best;
   }
 }
+
 function evaluate(boardState) {
   for (let pattern of winPatterns) {
     const [a, b, c] = pattern;
@@ -111,5 +113,33 @@ function evaluate(boardState) {
   if (!boardState.includes('')) return 0;
   return null;
 }
-renderBoard();
 
+// ✅ Check for winner or draw
+function checkWinner() {
+  for (let pattern of winPatterns) {
+    const [a, b, c] = pattern;
+    if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+      gameActive = false;
+      document.getElementById('status').textContent = `${cells[a]} wins!`;
+      return true;
+    }
+  }
+  if (!cells.includes('')) {
+    gameActive = false;
+    document.getElementById('status').textContent = "It's a draw!";
+    return true;
+  }
+  return false;
+}
+
+// ✅ Restart game
+function resetGame() {
+  cells = Array(9).fill('');
+  currentPlayer = 'X';
+  gameActive = true;
+  document.getElementById('status').textContent = "Your turn";
+  renderBoard();
+}
+
+// ✅ Initialize board on load
+renderBoard();
