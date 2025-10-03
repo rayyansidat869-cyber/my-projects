@@ -16,8 +16,10 @@ function renderBoard() {
     const cellDiv = document.createElement('div');
     cellDiv.className = 'cell';
     cellDiv.textContent = cell;
-    cellDiv.onclick = () => handleClick(index);
-    board.appendChild(cellDiv);
+   cellDiv.addEventListener('click', () => handleClick(index));
+cellDiv.addEventListener('touchstart', () => handleClick(index));
+
+  board.appendChild(cellDiv);
   });
 }
 
