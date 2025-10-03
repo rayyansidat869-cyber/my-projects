@@ -173,4 +173,31 @@ function drawWinLine(start, end) {
   const x1 = (start % 3) * cellSize + cellSize / 2;
   const y1 = Math.floor(start / 3) * cellSize + cellSize / 2;
   const x2 = (end % 3) * cellSize + cellSize / 2;
-  const y
+  const y2 = Math.floor(end / 3) * cellSize + cellSize / 2;
+
+  let progress = 0;
+  const steps = 30;
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+
+    const currentX = x1 + (x2 - x1) * (progress / steps);
+    const currentY = y1 + (y2 - y1) * (progress / steps);
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(currentX, currentY);
+    ctx.stroke();
+
+    progress++;
+    if (progress <= steps) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  animate();
+}
+
