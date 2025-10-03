@@ -8,6 +8,7 @@ const winPatterns = [
   [0,4,8], [2,4,6]
 ];
 
+// ✅ Render the board
 function renderBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
@@ -20,6 +21,7 @@ function renderBoard() {
   });
 }
 
+// ✅ Handle player move
 function handleClick(index) {
   if (!gameActive || cells[index]) return;
   cells[index] = currentPlayer;
@@ -31,9 +33,11 @@ function handleClick(index) {
   setTimeout(computerMove, 500);
 }
 
+// ✅ AI move
 function computerMove() {
   if (!gameActive) return;
-  const mode = document.getElementById('mode').value;
+  const modeSelect = document.getElementById('mode');
+  const mode = modeSelect ? modeSelect.value : 'easy';
   let move;
 
   if (mode === 'easy') {
@@ -43,6 +47,8 @@ function computerMove() {
     move = getBestMove();
   }
 
+  if (move === undefined) return;
+
   cells[move] = 'O';
   renderBoard();
   if (checkWinner()) return;
@@ -51,6 +57,7 @@ function computerMove() {
   document.getElementById('status').textContent = "Your turn";
 }
 
+// ✅ Minimax for hard mode
 function getBestMove() {
   let bestScore = -Infinity;
   let move;
@@ -101,34 +108,3 @@ function evaluate(boardState) {
     if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
       return boardState[a] === 'O' ? 1 : -1;
     }
-  }
-  if (!boardState.includes('')) return 0;
-  return null;
-}
-
-function checkWinner() {
-  for (let pattern of winPatterns) {
-    const [a, b, c] = pattern;
-    if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
-      gameActive = false;
-      document.getElementById('status').textContent = `${cells[a]} wins!`;
-      return true;
-    }
-  }
-  if (!cells.includes('')) {
-    gameActive = false;
-    document.getElementById('status').textContent = "It's a draw!";
-    return true;
-  }
-  return false;
-}
-
-function resetGame() {
-  cells = Array(9).fill('');
-  currentPlayer = 'X';
-  gameActive = true;
-  document.getElementById('status').textContent = "Your turn";
-  renderBoard();
-}
-
-renderBoard();
