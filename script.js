@@ -1,8 +1,6 @@
-let playerName = "Player";
+let cells = Array(9).fill('');
 let currentPlayer = 'X';
 let gameActive = true;
-let cells = Array(9).fill('');
-let xWins = 0, oWins = 0;
 
 const winPatterns = [
   [0,1,2], [3,4,5], [6,7,8],
@@ -10,16 +8,6 @@ const winPatterns = [
   [0,4,8], [2,4,6]
 ];
 
-// ✅ Start Game button logic
-function startGame() {
-  const nameInput = document.getElementById('playerName').value;
-  playerName = nameInput || "Player";
-  document.getElementById('splash').style.display = 'none';
-  document.getElementById('game').style.display = 'block';
-  resetGame();
-}
-
-// ✅ Render board
 function renderBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
@@ -30,25 +18,19 @@ function renderBoard() {
     cellDiv.onclick = () => handleClick(index);
     board.appendChild(cellDiv);
   });
-  clearCanvas();
 }
 
-// ✅ Handle player move
 function handleClick(index) {
   if (!gameActive || cells[index]) return;
   cells[index] = currentPlayer;
   renderBoard();
   if (checkWinner()) return;
 
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-  updateStatus();
-
-  if (currentPlayer === 'O') {
-    setTimeout(computerMove, 500);
-  }
+  currentPlayer = 'O';
+  document.getElementById('status').textContent = "Computer's turn";
+  setTimeout(computerMove, 500);
 }
 
-// ✅ AI move
 function computerMove() {
   if (!gameActive) return;
   const mode = document.getElementById('mode').value;
@@ -66,10 +48,9 @@ function computerMove() {
   if (checkWinner()) return;
 
   currentPlayer = 'X';
-  updateStatus();
+  document.getElementById('status').textContent = "Your turn";
 }
 
-// ✅ Minimax for hard mode
 function getBestMove() {
   let bestScore = -Infinity;
   let move;
@@ -91,3 +72,63 @@ function minimax(boardState, depth, isMaximizing) {
   const winner = evaluate(boardState);
   if (winner !== null) return winner;
 
+  if (isMaximizing) {
+    let best = -Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (boardState[i] === '') {
+        boardState[i] = 'O';
+        best = Math.max(best, minimax(boardState, depth + 1, false));
+        boardState[i] = '';
+      }
+    }
+    return best;
+  } else {
+    let best = Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (boardState[i] === '') {
+        boardState[i] = 'X';
+        best = Math.min(best, minimax(boardState, depth + 1, true));
+        boardState[i] = '';
+      }
+    }
+    return best;
+  }
+}
+
+function evaluate(boardState) {
+  for (let pattern of winPatterns) {
+    const [a, b, c] = pattern;
+    if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+      return boardState[a] === 'O' ? 1 : -1;
+    }
+  }
+  if (!boardState.includes('')) return 0;
+  return null;
+}
+
+function checkWinner() {
+  for (let pattern of winPatterns) {
+    const [a, b, c] = pattern;
+    if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+      gameActive = false;
+      document.getElementById('status').textContent = `${cells[a]} wins!`;
+      return true;
+    }
+  }
+  if (!cells.includes('')) {
+    gameActive = false;
+    document.getElementById('status').textContent = "It's a draw!";
+    return true;
+  }
+  return false;
+}
+
+function resetGame() {
+  cells = Array(9).fill('');
+  currentPlayer = 'X';
+  gameActive = true;
+  document.getElementById('status').textContent = "Your turn";
+  renderBoard();
+}
+
+renderBoard();
