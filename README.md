@@ -1,6 +1,6 @@
 # Tic Tac Toe Game 🎮
 
-A browser-based Tic Tac Toe game with Easy and Hard AI modes. Built using HTML, CSS, and JavaScript.
+A browser-based Tic Tac Toe game with Easy and Hard And Impossible AI modes. Built using HTML, CSS, and JavaScript.
 
 ## Features
 - Player vs Computer
